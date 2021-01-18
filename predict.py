@@ -59,7 +59,7 @@ def predict(img, model, top_k):
   probs, classes = tf.math.top_k(prediction,top_k)
   probs = probs.numpy().squeeze()
   classes = classes.numpy().squeeze()
-  #classes = [str(i) for i in classes]
+  classes = [str(i) for i in classes]
   return probs
 
 
