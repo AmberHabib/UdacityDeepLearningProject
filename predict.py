@@ -59,7 +59,7 @@ def predict(img, model, top_k):
   probs, classes = tf.math.top_k(prediction,top_k)
   probs = probs.numpy().squeeze()
   classes = classes.numpy().squeeze()
-  classes = [str(i) for i in classes]
+  classes = [str(i)for i in classes]
   return probs
 
 
@@ -80,7 +80,7 @@ def main():
     print("AAAA")
     
     #call predict function, which will call process image function
-    probs = predict(img_path, model, int(args.top_k))
+    probs,classes = predict(img_path, model, int(args.top_k))
     print("AAAAA")
 
     # map labels to class names
