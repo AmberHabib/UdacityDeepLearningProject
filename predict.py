@@ -27,8 +27,8 @@ from PIL import Image
 #Using this mentor answer to help set up the argparse arguments
 #https://knowledge.udacity.com/questions/230319
 
-#Parse arguments in this order
-#image path, model path, topK, class labels
+#argument parser function, to parse arguments in this order
+#image path, model path, top K, class labels
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('path', action='store', help='image path')
@@ -49,7 +49,6 @@ def process_image(image):
     return image
 
 #predict function  
-
 def predict(img, model, top_k):
   image = Image.open(img)
   image = np.asarray(image)
@@ -59,29 +58,26 @@ def predict(img, model, top_k):
   probs, classes = tf.math.top_k(prediction,top_k)
   probs = probs.numpy().squeeze()
   classes = classes.numpy().squeeze()
-  classes = [str(i)for i in classes]
-  return probs
+  classes = [str(i+1) for i in classes]
+  return probs, classes
 
 
 def main():
     #parse arguments
     args = parse_args()
-    print("A")
+    
     #load model
     model = tf.keras.models.load_model('./'+args.checkpoint, custom_objects={'KerasLayer': hub.KerasLayer})
-    print("AA")
+   
     # load  class labels from label map.json
     with open(args.category_names, 'r') as f:
         cat_to_name = json.load(f)
 
-    print("AAA")
     #path to image
     img_path = args.path
-    print("AAAA")
     
     #call predict function, which will call process image function
     probs,classes = predict(img_path, model, int(args.top_k))
-    print("AAAAA")
 
     # map labels to class names
     labels = [cat_to_name[str(index)] for index in classes]
